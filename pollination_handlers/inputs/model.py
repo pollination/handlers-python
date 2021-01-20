@@ -1,3 +1,4 @@
+"""Handlers for honeybee model."""
 import os
 import json
 import tempfile
@@ -6,8 +7,19 @@ from honeybee.model import Model
 
 
 def model_to_json_path(model_obj):
-    """Save Honeybee model to a JSON file and return JSON path."""
+    """Translate a Honeybee model to a HBJSON file.
+
+        Args:
+            model_obj: Either a Honeybee model or the path to the HBJSON file.
+                In case the model_obj is a path it will be returned as is. For HBModels
+                the model will be saved to a HBJSON file in a temp folder.
+
+        Returns:
+            str -- Path to HBJSON file.
+    """
     if isinstance(model_obj, str):
+        if not os.path.isfile(model_obj):
+            raise ValueError('Invalid file path: %s' % model_obj)
         hb_file = model_obj
     elif isinstance(model_obj, Model):
         file_name = str(uuid.uuid4())[:6]
@@ -24,19 +36,6 @@ def model_to_json_path(model_obj):
             json.dump(obj_dict, fp)
     else:
         raise ValueError(
-            'model input should be a string or a Honeybee Model not a ' + type(model_obj)
+            'Model input should be a string or a Honeybee Model not a ' + type(model_obj)
         )
     return hb_file
-
-
-def read_DF_from_path(resultFile):
-    """Read daylight factor values from a radiance .res result file."""
-    result = []
-    resultFile = open(resultFile, "r")
-    for line in resultFile:
-        res = float(line)
-        if res > 100:
-            res = 100
-        result.append(res)
-    return result
-
