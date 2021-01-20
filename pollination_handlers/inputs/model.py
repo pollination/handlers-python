@@ -6,7 +6,7 @@ import uuid
 from honeybee.model import Model
 
 
-def model_to_json_path(model_obj):
+def model_to_json(model_obj):
     """Translate a Honeybee model to a HBJSON file.
 
         Args:
