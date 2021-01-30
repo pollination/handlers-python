@@ -1,9 +1,10 @@
 """Handlers for honeybee model."""
 import os
 import json
-import tempfile
-import uuid
+
 from honeybee.model import Model
+
+from .helper import get_tempfile
 
 
 def model_to_json(model_obj):
@@ -22,10 +23,7 @@ def model_to_json(model_obj):
             raise ValueError('Invalid file path: %s' % model_obj)
         hb_file = model_obj
     elif isinstance(model_obj, Model):
-        file_name = str(uuid.uuid4())[:6]
-        temp_dir = tempfile.gettempdir()
-        hb_file = os.path.join(temp_dir, file_name + '.hbjson')
-
+        hb_file = get_tempfile('hbjson')
         try:
             obj_dict = model_obj.to_dict(abridged=True)
         except TypeError:  # no abridged option
