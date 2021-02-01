@@ -1,4 +1,4 @@
-"""Handlers for honeybee model."""
+"""Handlers for wea file."""
 import os
 
 from ladybug.epw import EPW
@@ -41,6 +41,6 @@ def wea_handler(wea_obj):
         wea_file = wea_obj.to_wea(file_path)
     else:
         raise ValueError(
-            'Model input should be a string or a Honeybee Model not a ' + type(wea_obj)
+            'Model input should be a string or a Wea object not a ' + type(wea_obj)
         )
     return wea_file
