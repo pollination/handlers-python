@@ -11,7 +11,7 @@ def wea_handler(wea_obj):
     """Translate a Wea object to a wea file.
 
         Args:
-            wea_obj: Either a WEA python object or the path to a wea or an epw file.
+            wea_obj: Either a Wea python object or the path to a wea or an epw file.
                 In case the wea_obj is a path to wea file it will be returned as is.
                 For epw files they will be converted to an annual wea.
 
@@ -41,6 +41,7 @@ def wea_handler(wea_obj):
         wea_file = wea_obj.to_wea(file_path)
     else:
         raise ValueError(
-            'Model input should be a string or a Wea object not a ' + type(wea_obj)
+            'Wea input should be a string, a Wea object, or an EPW object. '
+            'Not {}.'.format(type(wea_obj))
         )
     return wea_file
