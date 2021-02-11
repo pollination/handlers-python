@@ -1,5 +1,4 @@
 """Handlers to convert various boolean options to boolean flag strings."""
-from .helper import get_tempfile
 
 
 def filter_des_days_to_str(value):
