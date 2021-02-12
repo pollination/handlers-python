@@ -27,17 +27,17 @@ def wea_handler(wea_obj):
         elif wea_obj.lower().endswith('.epw'):
             # translate epw to wea
             wea = Wea.from_epw_file(wea_obj)
-            file_path = get_tempfile('wea')
+            file_path = get_tempfile('wea', wea.location.city)
             wea_file = wea.write(file_path)
         else:
             raise ValueError(
                 'File path should end with wea or epw not %s' % wea_obj.split('.')[-1]
             )
     elif isinstance(wea_obj, Wea):
-        file_path = get_tempfile('wea')
+        file_path = get_tempfile('wea', wea_obj.location.city)
         wea_file = wea_obj.write(file_path)
     elif isinstance(wea_obj, EPW):
-        file_path = get_tempfile('wea')
+        file_path = get_tempfile('wea', wea_obj.location.city)
         wea_file = wea_obj.to_wea(file_path)
     else:
         raise ValueError(

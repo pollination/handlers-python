@@ -27,17 +27,17 @@ def ddy_handler(ddy_obj):
             ddy_file = ddy_obj
         elif ddy_obj.lower().endswith('.epw'):
             epw_obj = EPW(ddy_obj)
-            file_path = get_tempfile('ddy')
+            file_path = get_tempfile('ddy', epw_obj.location.city)
             ddy_file = epw_obj.to_ddy(file_path)
         else:
             raise ValueError(
                 'File path should end with ddy or epw not %s' % ddy_obj.split('.')[-1]
             )
     elif isinstance(ddy_obj, DDY):
-        ddy_file = get_tempfile('ddy')
+        ddy_file = get_tempfile('ddy', ddy_obj.location.city)
         ddy_obj.save(ddy_file)
     elif isinstance(ddy_obj, EPW):
-        file_path = get_tempfile('ddy')
+        file_path = get_tempfile('ddy', ddy_obj.location.city)
         ddy_file = ddy_obj.to_ddy(file_path)
     else:
         raise ValueError(
