@@ -24,9 +24,8 @@ def energy_sim_par_to_json(sim_par_obj):
             raise ValueError('Invalid file path: %s' % sim_par_obj)
         sp_file = sim_par_obj
     elif isinstance(sim_par_obj, SimulationParameter):
-        sp_file = get_tempfile('json')
+        sp_file = get_tempfile('json', 'simulation_parameter')
         obj_dict = sim_par_obj.to_dict()
-
         # write the dictionary into a file
         with open(sp_file, 'w') as fp:
             json.dump(obj_dict, fp)

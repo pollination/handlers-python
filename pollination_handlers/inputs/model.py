@@ -24,10 +24,9 @@ def model_to_json(model_obj):
             raise ValueError('Invalid file path: %s' % model_obj)
         hb_file = model_obj
     elif isinstance(model_obj, Model):
-        hb_file = get_tempfile('hbjson')
-        obj_dict = model_obj.to_dict()
-
+        hb_file = get_tempfile('hbjson', model_obj.identifier)
         # write the dictionary into a file
+        obj_dict = model_obj.to_dict()
         with open(hb_file, 'w') as fp:
             json.dump(obj_dict, fp)
     else:
@@ -54,10 +53,9 @@ def model_dragonfly_to_json(model_obj):
             raise ValueError('Invalid file path: %s' % model_obj)
         df_file = model_obj
     elif isinstance(model_obj, ModelDF):
-        df_file = get_tempfile('dfjson')
-        obj_dict = model_obj.to_dict()
-
+        df_file = get_tempfile('dfjson', model_obj.identifier)
         # write the dictionary into a file
+        obj_dict = model_obj.to_dict()
         with open(df_file, 'w') as fp:
             json.dump(obj_dict, fp)
     else:
