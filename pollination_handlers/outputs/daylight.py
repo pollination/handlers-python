@@ -21,7 +21,8 @@ def read_df_from_folder(result_folder):
         grid_list = json.load(json_file)
     results = []
     for grid in grid_list:
-        result_file = os.path.join(result_folder, '{}.res'.format(grid['identifier']))
+        id_ = grid['full_id'] if 'full_id' in grid else grid['identifier']
+        result_file = os.path.join(result_folder, '{}.res'.format(id_))
         if os.path.isfile(result_file):
             with open(result_file) as inf:
                 results.append([min(float(line), 100) for line in inf])
@@ -43,7 +44,8 @@ def sort_ill_from_folder(result_folder):
         grid_list = json.load(json_file)
     results = []
     for grid in grid_list:
-        result_file = os.path.join(result_folder, '{}.ill'.format(grid['identifier']))
+        id_ = grid['full_id'] if 'full_id' in grid else grid['identifier']
+        result_file = os.path.join(result_folder, '{}.ill'.format(id_))
         if os.path.isfile(result_file):
             results.append(result_file)
     sun_up_file = os.path.join(result_folder, 'sun-up-hours.txt')
