@@ -80,3 +80,30 @@ def is_residential_to_str(value):
             'Not {}.'.format(type(value))
         )
     return is_residential
+
+
+def write_set_map_to_str(value):
+    """Translate a boolean to the write_set_map flag.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * write-op-map
+            * write-set-map
+
+        Returns:
+            str -- write_set_map flag text.
+    """
+    acceptable = ('write-set-map', 'write-op-map')
+    if isinstance(value, str):
+        assert value in acceptable, 'write_set_map value "{}" is not acceptable. ' \
+            'Must be one of the following: {}'.format(value, acceptable)
+        write_set_map = value
+    elif isinstance(value, bool):
+        write_set_map = acceptable[0] if value else acceptable[1]
+    else:
+        raise ValueError(
+            'write_set_map input should be a string or a boolean. '
+            'Not {}.'.format(type(value))
+        )
+    return write_set_map
