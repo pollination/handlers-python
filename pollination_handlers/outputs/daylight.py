@@ -1,4 +1,4 @@
-"""Handlers for daylight factor simulation."""
+"""Handlers for daylight simulation."""
 import os
 import json
 
