@@ -8,9 +8,9 @@ def test_read_df():
 
 
 def test_read_da():
-    res = sort_ill_from_folder('./tests/assets/da_results/')
+    res = sort_ill_from_folder('./tests/assets/annual_dl_results/')
     assert res == [
-        './tests/assets/da_results/TestRoom_1.ill',
-        './tests/assets/da_results/TestRoom_2.ill',
-        './tests/assets/da_results/sun-up-hours.txt'
+        './tests/assets/annual_dl_results/TestRoom_1.ill',
+        './tests/assets/annual_dl_results/TestRoom_2.ill',
+        './tests/assets/annual_dl_results/sun-up-hours.txt'
     ]
