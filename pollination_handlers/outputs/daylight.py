@@ -25,6 +25,11 @@ def read_udi_from_folder(result_folder):
     return read_sensor_grid_result(result_folder, 'udi', 'full_id')
 
 
+def read_hours_from_folder(result_folder):
+    """Read hours from a folder with radiance .res result files."""
+    return read_sensor_grid_result(result_folder, 'res', 'full_id', False)
+
+
 def sort_ill_from_folder(result_folder):
     """Sort the .ill files from an annual study so that they align with Model grids.
     """
