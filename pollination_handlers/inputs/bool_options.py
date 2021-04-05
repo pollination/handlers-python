@@ -1,5 +1,5 @@
 """Handlers to convert various boolean options to boolean flag strings."""
-
+_BOOL_STRINGS = ('True', 'False')
 
 def filter_des_days_to_str(value):
     """Translate a boolean to the filter_des_days flag.
@@ -13,11 +13,14 @@ def filter_des_days_to_str(value):
         Returns:
             str -- filter_des_days flag text.
     """
-    acceptable = ('filter-des-days', 'all-des-days')
+    acceptable = ('filter-des-days', 'all-des-days') + _BOOL_STRINGS
     if isinstance(value, str):
         assert value in acceptable, 'filter_des_days value "{}" is not acceptable. ' \
             'Must be one of the following: {}'.format(value, acceptable)
-        filter_des_days = value
+        if value in _BOOL_STRINGS:
+            filter_des_days = acceptable[0] if value == 'True' else acceptable[1]
+        else:
+            filter_des_days = value
     elif isinstance(value, bool):
         filter_des_days = acceptable[0] if value else acceptable[1]
     else:
@@ -40,11 +43,14 @@ def use_multiplier_to_str(value):
         Returns:
             str -- use_multiplier flag text.
     """
-    acceptable = ('multiplier', 'full-geometry')
+    acceptable = ('multiplier', 'full-geometry') + _BOOL_STRINGS
     if isinstance(value, str):
         assert value in acceptable, 'use_multiplier value "{}" is not acceptable. ' \
             'Must be one of the following: {}'.format(value, acceptable)
-        use_multiplier = value
+        if value in _BOOL_STRINGS:
+            use_multiplier = acceptable[0] if value == 'True' else acceptable[1]
+        else:
+            use_multiplier = value
     elif isinstance(value, bool):
         use_multiplier = acceptable[0] if value else acceptable[1]
     else:
@@ -67,11 +73,14 @@ def is_residential_to_str(value):
         Returns:
             str -- is_residential flag text.
     """
-    acceptable = ('residential', 'nonresidential')
+    acceptable = ('residential', 'nonresidential') + _BOOL_STRINGS
     if isinstance(value, str):
         assert value in acceptable, 'is_residential value "{}" is not acceptable. ' \
             'Must be one of the following: {}'.format(value, acceptable)
-        is_residential = value
+        if value in _BOOL_STRINGS:
+            is_residential = acceptable[0] if value == 'True' else acceptable[1]
+        else:
+            is_residential = value
     elif isinstance(value, bool):
         is_residential = acceptable[0] if value else acceptable[1]
     else:
@@ -94,11 +103,14 @@ def write_set_map_to_str(value):
         Returns:
             str -- write_set_map flag text.
     """
-    acceptable = ('write-set-map', 'write-op-map')
+    acceptable = ('write-set-map', 'write-op-map') + _BOOL_STRINGS
     if isinstance(value, str):
         assert value in acceptable, 'write_set_map value "{}" is not acceptable. ' \
             'Must be one of the following: {}'.format(value, acceptable)
-        write_set_map = value
+        if value in _BOOL_STRINGS:
+            write_set_map = acceptable[0] if value == 'True' else acceptable[1]
+        else:
+            write_set_map = value
     elif isinstance(value, bool):
         write_set_map = acceptable[0] if value else acceptable[1]
     else:
