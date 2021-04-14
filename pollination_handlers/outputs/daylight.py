@@ -45,7 +45,11 @@ def sort_ill_from_folder(result_folder):
         grid_list = json.load(json_file)
     results = []
     for grid in grid_list:
-        id_ = grid['full_id'] if 'full_id' in grid else grid['identifier']
+        try:
+            id_ = grid['full_id']
+        except KeyError:
+            # older version
+            id_ = grid['identifier']
         result_file = os.path.join(result_folder, '{}.ill'.format(id_))
         if os.path.isfile(result_file):
             results.append(result_file)
