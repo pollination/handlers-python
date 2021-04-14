@@ -9,7 +9,7 @@ def read_sensor_grid_result(result_folder, extension, grid_key, is_percent=True)
         result_folder: Path to the folder containing the results.
         extension: Text for the file extension to be read (eg. res).
         grid_key: Text for the key in the grids_info.json that identifies the
-            file name of each sensor grid. It is either identifier or group_identifier.
+            file name of each sensor grid. It is either identifier or full_id.
         is_percent: Boolean to note if the values are intended to be percent, in
             which case a check will be done to ensure no value is greater than
             one hundred.
