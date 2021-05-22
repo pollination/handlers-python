@@ -10,6 +10,11 @@ def read_df_from_folder(result_folder):
     return read_sensor_grid_result(result_folder, 'res', 'full_id')
 
 
+def read_pit_from_folder(result_folder):
+    """Read point-in-time results from a folder with radiance .res result files."""
+    return read_sensor_grid_result(result_folder, 'res', 'full_id', False)
+
+
 def read_da_from_folder(result_folder):
     """Read daylight autonomy values from a folder with radiance .da result files."""
     return read_sensor_grid_result(result_folder, 'da', 'full_id')

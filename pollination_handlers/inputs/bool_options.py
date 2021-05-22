@@ -1,6 +1,7 @@
 """Handlers to convert various boolean options to boolean flag strings."""
 _BOOL_STRINGS = ('True', 'False')
 
+
 def filter_des_days_to_str(value):
     """Translate a boolean to the filter_des_days flag.
 
