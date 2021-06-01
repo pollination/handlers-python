@@ -45,3 +45,19 @@ def wea_handler(wea_obj):
             'Not {}.'.format(type(wea_obj))
         )
     return wea_file
+
+
+def wea_handler_timestep_check(wea_obj):
+    """Translate a Wea object to a wea file while checking to be sure the timesep is 1.
+
+        Args:
+            wea_obj: Either a Wea python object or the path to a wea or an epw file.
+                In case the wea_obj is a path to wea file it will be returned as is.
+                For epw files they will be converted to an annual wea.
+
+        Returns:
+            str -- Path to a wea file.
+    """
+    if isinstance(wea_obj, Wea):
+        assert wea_obj.timestep == 1, 'Wea timestep must be 1 for this recipe.'
+    return wea_handler(wea_obj)
