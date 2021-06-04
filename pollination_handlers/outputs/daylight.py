@@ -62,3 +62,24 @@ def sort_ill_from_folder(result_folder):
     if os.path.isfile(sun_up_file):
         results.append(sun_up_file)
     return results
+
+
+def read_images_from_folder(result_folder):
+    """Read hdr images from a folder in a manner that aligns with Model views."""
+    # check that the required files are present
+    if not os.path.isdir(result_folder):
+        raise ValueError('Invalid result folder: %s' % result_folder)
+    view_json = os.path.join(result_folder, 'views_info.json')
+    if not os.path.isfile(view_json):
+        raise ValueError('Result folder contains no views_info.json.')
+
+    # load the list of views and gather all of the result files
+    with open(view_json) as json_file:
+        view_list = json.load(json_file)
+    results = []
+    for view in view_list:
+        id_ = view['full_id']
+        result_file = os.path.join(result_folder, '{}.HDR'.format(id_))
+        if os.path.isfile(result_file):
+            results.append(result_file)
+    return results
