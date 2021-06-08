@@ -32,6 +32,36 @@ def filter_des_days_to_str(value):
     return filter_des_days
 
 
+def skip_overture_to_str(value):
+    """Translate a boolean to the skip_overture flag.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * skip-overture
+            * overture
+
+        Returns:
+            str -- skip_overture flag text.
+    """
+    acceptable = ('skip-overture', 'overture') + _BOOL_STRINGS
+    if isinstance(value, str):
+        assert value in acceptable, 'skip_overture value "{}" is not acceptable. ' \
+            'Must be one of the following: {}'.format(value, acceptable)
+        if value in _BOOL_STRINGS:
+            skip_overture = acceptable[0] if value == 'True' else acceptable[1]
+        else:
+            skip_overture = value
+    elif isinstance(value, bool):
+        skip_overture = acceptable[0] if value else acceptable[1]
+    else:
+        raise ValueError(
+            'skip_overture input should be a string or a boolean. '
+            'Not {}.'.format(type(value))
+        )
+    return skip_overture
+
+
 def use_multiplier_to_str(value):
     """Translate a boolean to the use_multiplier flag.
 
