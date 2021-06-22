@@ -2,6 +2,28 @@ import os
 import tempfile
 import uuid
 
+_BOOL_STRINGS = ('True', 'False')
+
+
+def bool_option_to_str(value, acceptable_strings, input_name=''):
+    """Convert a boolean option to a string given a list of acceptable values."""
+    acceptable = acceptable_strings + _BOOL_STRINGS
+    if isinstance(value, str):
+        assert value in acceptable, '{} value "{}" is not acceptable. ' \
+            'Must be one of the following: {}'.format(input_name, value, acceptable)
+        if value in _BOOL_STRINGS:
+            result = acceptable[0] if value == 'True' else acceptable[1]
+        else:
+            result = value
+    elif isinstance(value, bool):
+        result = acceptable[0] if value else acceptable[1]
+    else:
+        raise ValueError(
+            '{} input should be a string or a boolean. '
+            'Got {}.'.format(input_name, type(value))
+        )
+    return result
+
 
 def get_tempfile(extension, file_name=None):
     """Get full path to a temporary file with extension."""
