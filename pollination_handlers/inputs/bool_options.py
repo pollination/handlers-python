@@ -1,5 +1,5 @@
 """Handlers to convert various boolean options to boolean flag strings."""
-_BOOL_STRINGS = ('True', 'False')
+from .helper import bool_option_to_str
 
 
 def filter_des_days_to_str(value):
@@ -14,22 +14,9 @@ def filter_des_days_to_str(value):
         Returns:
             str -- filter_des_days flag text.
     """
-    acceptable = ('filter-des-days', 'all-des-days') + _BOOL_STRINGS
-    if isinstance(value, str):
-        assert value in acceptable, 'filter_des_days value "{}" is not acceptable. ' \
-            'Must be one of the following: {}'.format(value, acceptable)
-        if value in _BOOL_STRINGS:
-            filter_des_days = acceptable[0] if value == 'True' else acceptable[1]
-        else:
-            filter_des_days = value
-    elif isinstance(value, bool):
-        filter_des_days = acceptable[0] if value else acceptable[1]
-    else:
-        raise ValueError(
-            'filter_des_days input should be a string or a boolean. '
-            'Not {}.'.format(type(value))
-        )
-    return filter_des_days
+    return bool_option_to_str(
+        value, ('filter-des-days', 'all-des-days'), 'filter_des_days'
+    )
 
 
 def skip_overture_to_str(value):
@@ -44,22 +31,24 @@ def skip_overture_to_str(value):
         Returns:
             str -- skip_overture flag text.
     """
-    acceptable = ('skip-overture', 'overture') + _BOOL_STRINGS
-    if isinstance(value, str):
-        assert value in acceptable, 'skip_overture value "{}" is not acceptable. ' \
-            'Must be one of the following: {}'.format(value, acceptable)
-        if value in _BOOL_STRINGS:
-            skip_overture = acceptable[0] if value == 'True' else acceptable[1]
-        else:
-            skip_overture = value
-    elif isinstance(value, bool):
-        skip_overture = acceptable[0] if value else acceptable[1]
-    else:
-        raise ValueError(
-            'skip_overture input should be a string or a boolean. '
-            'Not {}.'.format(type(value))
-        )
-    return skip_overture
+    return bool_option_to_str(value, ('skip-overture', 'overture'), 'skip_overture')
+
+
+def glare_control_devices_to_str(value):
+    """Translate a boolean to the glare_control_devices flag.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * glare-control
+            * no-glare-control
+
+        Returns:
+            str -- glare_control_devices flag text.
+    """
+    return bool_option_to_str(
+        value, ('glare-control', 'no-glare-control'), 'glare_control_devices'
+    )
 
 
 def use_multiplier_to_str(value):
@@ -74,22 +63,7 @@ def use_multiplier_to_str(value):
         Returns:
             str -- use_multiplier flag text.
     """
-    acceptable = ('multiplier', 'full-geometry') + _BOOL_STRINGS
-    if isinstance(value, str):
-        assert value in acceptable, 'use_multiplier value "{}" is not acceptable. ' \
-            'Must be one of the following: {}'.format(value, acceptable)
-        if value in _BOOL_STRINGS:
-            use_multiplier = acceptable[0] if value == 'True' else acceptable[1]
-        else:
-            use_multiplier = value
-    elif isinstance(value, bool):
-        use_multiplier = acceptable[0] if value else acceptable[1]
-    else:
-        raise ValueError(
-            'use_multiplier input should be a string or a boolean. '
-            'Not {}.'.format(type(value))
-        )
-    return use_multiplier
+    return bool_option_to_str(value, ('multiplier', 'full-geometry'), 'use_multiplier')
 
 
 def is_residential_to_str(value):
@@ -104,22 +78,7 @@ def is_residential_to_str(value):
         Returns:
             str -- is_residential flag text.
     """
-    acceptable = ('residential', 'nonresidential') + _BOOL_STRINGS
-    if isinstance(value, str):
-        assert value in acceptable, 'is_residential value "{}" is not acceptable. ' \
-            'Must be one of the following: {}'.format(value, acceptable)
-        if value in _BOOL_STRINGS:
-            is_residential = acceptable[0] if value == 'True' else acceptable[1]
-        else:
-            is_residential = value
-    elif isinstance(value, bool):
-        is_residential = acceptable[0] if value else acceptable[1]
-    else:
-        raise ValueError(
-            'is_residential input should be a string or a boolean. '
-            'Not {}.'.format(type(value))
-        )
-    return is_residential
+    return bool_option_to_str(value, ('residential', 'nonresidential'), 'is_residential')
 
 
 def write_set_map_to_str(value):
@@ -134,19 +93,4 @@ def write_set_map_to_str(value):
         Returns:
             str -- write_set_map flag text.
     """
-    acceptable = ('write-set-map', 'write-op-map') + _BOOL_STRINGS
-    if isinstance(value, str):
-        assert value in acceptable, 'write_set_map value "{}" is not acceptable. ' \
-            'Must be one of the following: {}'.format(value, acceptable)
-        if value in _BOOL_STRINGS:
-            write_set_map = acceptable[0] if value == 'True' else acceptable[1]
-        else:
-            write_set_map = value
-    elif isinstance(value, bool):
-        write_set_map = acceptable[0] if value else acceptable[1]
-    else:
-        raise ValueError(
-            'write_set_map input should be a string or a boolean. '
-            'Not {}.'.format(type(value))
-        )
-    return write_set_map
+    return bool_option_to_str(value, ('write-set-map', 'write-op-map'), 'write_set_map')

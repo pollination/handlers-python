@@ -83,3 +83,15 @@ def read_images_from_folder(result_folder):
         if os.path.isfile(result_file):
             results.append(result_file)
     return results
+
+
+def ill_credit_json_from_path(eui_json):
+    """Read the credit summary values from the credit_summary.json file."""
+    if not os.path.isfile(eui_json):
+        raise ValueError('Invalid file path: %s' % eui_json)
+    with open(eui_json) as json_file:
+        data = json.load(json_file)
+    results = []
+    for key in sorted(data.keys()):
+        results.append('{}: {}'.format(key, data[key]))
+    return results
