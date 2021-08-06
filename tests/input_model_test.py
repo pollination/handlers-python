@@ -1,7 +1,9 @@
 import json
 import os
+import pytest
 
-from pollination_handlers.inputs.model import model_to_json, model_dragonfly_to_json
+from pollination_handlers.inputs.model import model_to_json, model_to_json_grid_check, \
+    model_to_json_view_check, model_dragonfly_to_json
 from honeybee.model import Model
 from dragonfly.model import Model as ModelDF
 
@@ -19,6 +21,12 @@ def test_read_model_object():
 
     res = model_to_json(model)
     assert os.path.isfile(res)
+
+    res2 = model_to_json_grid_check(model)
+    assert os.path.isfile(res2)
+
+    with pytest.raises(ValueError):
+        model_to_json_view_check(model)
 
 
 def test_read_model_dragonfly_str():
