@@ -94,3 +94,33 @@ def write_set_map_to_str(value):
             str -- write_set_map flag text.
     """
     return bool_option_to_str(value, ('write-set-map', 'write-op-map'), 'write_set_map')
+
+
+def sky_view_metric_to_str(value):
+    """Translate a boolean to the sky view metric flag.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * sky-exposure
+            * sky-view
+
+        Returns:
+            str -- sky view metric flag text.
+    """
+    return bool_option_to_str(value, ('sky-exposure', 'sky-view'), 'metric')
+
+
+def cloudy_bool_to_str(value):
+    """Translate a boolean to the uniform/cloudy flag.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * cloudy
+            * uniform
+
+        Returns:
+            str -- sky view uniform/cloudy flag text.
+    """
+    return bool_option_to_str(value, ('cloudy', 'uniform'), 'metric')
