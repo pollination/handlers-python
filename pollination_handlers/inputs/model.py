@@ -36,6 +36,27 @@ def model_to_json(model_obj):
     return hb_file
 
 
+def model_to_json_room_check(model_obj):
+    """Translate a Honeybee model to HBJSON with checks for Rooms and SensorGrids.
+
+    If no Rooms or SensorGrids are found in the model, a ValueError will be
+    raised with an explicit error message.
+
+    Args:
+        model_obj: Either a Honeybee model or the path to the HBJSON file.
+            In case the model_obj is a path, it will be returned as is. For a
+            Model object, it will be saved to a HBJSON file in a temp folder.
+
+    Returns:
+        str -- Path to HBJSON file.
+    """
+    if isinstance(model_obj, Model):
+        if len(model_obj.rooms) == 0:
+            raise ValueError(
+                'Model contains no Rooms. This is required for this recipe.')
+    return model_to_json(model_obj)
+
+
 def model_to_json_grid_check(model_obj):
     """Translate a Honeybee model to HBJSON and perform a check for SensorGrids.
 
@@ -55,6 +76,27 @@ def model_to_json_grid_check(model_obj):
             raise ValueError(
                 'Model contains no sensor girds. This is required for this recipe.')
     return model_to_json(model_obj)
+
+
+def model_to_json_grid_room_check(model_obj):
+    """Translate a Honeybee model to HBJSON with checks for Rooms and SensorGrids.
+
+    If no Rooms or SensorGrids are found in the model, a ValueError will be
+    raised with an explicit error message.
+
+    Args:
+        model_obj: Either a Honeybee model or the path to the HBJSON file.
+            In case the model_obj is a path, it will be returned as is. For a
+            Model object, it will be saved to a HBJSON file in a temp folder.
+
+    Returns:
+        str -- Path to HBJSON file.
+    """
+    if isinstance(model_obj, Model):
+        if len(model_obj.rooms) == 0:
+            raise ValueError(
+                'Model contains no Rooms. This is required for this recipe.')
+    return model_to_json_grid_check(model_obj)
 
 
 def model_to_json_view_check(model_obj):
