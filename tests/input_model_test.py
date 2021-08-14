@@ -3,7 +3,8 @@ import os
 import pytest
 
 from pollination_handlers.inputs.model import model_to_json, model_to_json_grid_check, \
-    model_to_json_view_check, model_dragonfly_to_json
+    model_to_json_grid_room_check, model_to_json_view_check, model_dragonfly_to_json, \
+    model_to_json_room_check
 from honeybee.model import Model
 from dragonfly.model import Model as ModelDF
 
@@ -24,6 +25,12 @@ def test_read_model_object():
 
     res2 = model_to_json_grid_check(model)
     assert os.path.isfile(res2)
+
+    res3 = model_to_json_grid_room_check(model)
+    assert os.path.isfile(res3)
+
+    res4 = model_to_json_room_check(model)
+    assert os.path.isfile(res4)
 
     with pytest.raises(ValueError):
         model_to_json_view_check(model)
