@@ -118,7 +118,7 @@ def list_to_additional_strings(additional_strings):
         Returns:
             str -- A single IDF string.
     """
-    if additional_strings is None:
+    if additional_strings is None or additional_strings == '':
         return ''
     elif isinstance(additional_strings, str):
         return additional_strings
@@ -141,7 +141,7 @@ def viz_variables_to_string(viz_variables):
         Returns:
             str -- A single IDF string.
     """
-    if viz_variables is None:
+    if viz_variables is None or viz_variables == '':
         return ''
     elif isinstance(viz_variables, str):
         if not viz_variables.startswith('-v') and not \
