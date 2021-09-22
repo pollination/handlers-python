@@ -34,6 +34,16 @@ def get_tempfile(extension, file_name=None):
     return file_path
 
 
+def get_tempfolder(folder_name=None):
+    """Get full path to a temporary folder with extension."""
+    folder_name = str(uuid.uuid4())[:6] if folder_name is None \
+        or folder_name == '-' else folder_name
+    temp_dir = tempfile.gettempdir()
+    folder_path = os.path.join(temp_dir, folder_name)
+    os.mkdir(folder_path)
+    return folder_path
+
+
 def write_values_to_csv(file_path, values):
     """Write a list of fractional values to a discrete 0/1 CSV."""
     discrete_vals = []
