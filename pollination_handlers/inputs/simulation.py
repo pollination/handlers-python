@@ -1,6 +1,10 @@
 """Handlers for honeybee simulation parameters."""
 import os
 import json
+try:
+    from collections.abc import Iterable  # python < 3.7
+except ImportError:
+    from collections import Iterable  # python >= 3.8
 
 from ladybug.futil import copy_file_tree, nukedir
 from honeybee_energy.simulation.parameter import SimulationParameter
@@ -73,7 +77,7 @@ def measures_to_folder(measures_obj):
         if not osw_found:
             raise ValueError('No .osw file was found in: %s' % measures_obj)
         mea_folder = measures_obj
-    elif isinstance(measures_obj, (list, tuple)):
+    elif isinstance(measures_obj, Iterable):
         if len(measures_obj) == 0:
             return ''
         osw_dict = {}  # dictionary that will be turned into the OSW JSON
@@ -122,8 +126,8 @@ def list_to_additional_strings(additional_strings):
         return ''
     elif isinstance(additional_strings, str):
         return additional_strings
-    elif isinstance(additional_strings, (list, tuple)):
-        return '\n'.join(additional_strings)
+    elif isinstance(additional_strings, Iterable):
+        return '\n'.join(list(additional_strings))
     else:
         raise ValueError(
             'Additional strings input should be a list or a single string. '
@@ -148,7 +152,7 @@ def viz_variables_to_string(viz_variables):
                 viz_variables.startswith('--viz-variable'):
             viz_variables = '-v "{}"'.format(viz_variables)
         return viz_variables
-    elif isinstance(viz_variables, (list, tuple)):
+    elif isinstance(viz_variables, Iterable):
         viz_variables = ['-v "{}"'.format(var) for var in viz_variables]
         return ' '.join(viz_variables)
     else:
