@@ -9,5 +9,4 @@ def test_north_vector_to_angle():
     r_per_2 = AnalysisPeriod(6, 21, 0, 3, 21, 23)
 
     assert isinstance(run_period_to_str(r_per_1), str)
-    with pytest.raises(AssertionError):
-        run_period_to_str(r_per_2)
+    assert isinstance(run_period_to_str(r_per_2), str)
