@@ -8,4 +8,7 @@ def read_comfort_percent_from_folder(result_folder):
     The result with be a matrix with each sub-list containing the percent
     values for each of the sensor grids.
     """
-    return read_sensor_grid_result(result_folder, 'csv', 'id')
+    try:
+        return read_sensor_grid_result(result_folder, 'csv', 'full_id')
+    except KeyError:  # older specification
+        return read_sensor_grid_result(result_folder, 'csv', 'id')
