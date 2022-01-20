@@ -1,7 +1,8 @@
 """Handlers to convert inputs that accept ladybug data collections."""
 import os
 
-from ladybug.datacollection import HourlyContinuousCollection
+from ladybug.datacollection import HourlyContinuousCollection, \
+    HourlyDiscontinuousCollection
 from honeybee_energy.schedule.ruleset import ScheduleRuleset
 from honeybee_energy.schedule.fixedinterval import ScheduleFixedInterval
 from honeybee_energy.lib.schedules import schedule_by_identifier
@@ -45,5 +46,29 @@ def schedule_to_csv(value):
         raise ValueError(
             'Excpected a path to a CSV, an hourly data collection, or a honeybee '
             'schedule. Not {}.'.format(type(value))
+        )
+    return value
+
+
+def data_to_csv(value):
+    """Translate a data collection into a CSV.
+
+    Args:
+        value: An occupancy schedule, either as a path to a csv file,
+            a Ladybug Hourly Data Collection.
+
+    Returns:
+        str -- Path to a CSV of an annual schedule file. Values are 0-1 separated
+            by new line.
+    """
+    if isinstance(value, str):
+        assert os.path.isfile(value), \
+            'Failed to find CSV schedule file at: {}'.format(value)
+    elif isinstance(value, (HourlyContinuousCollection, HourlyDiscontinuousCollection)):
+        value = write_values_to_csv(get_tempfile('csv', 'occupancy'), value.values)
+    else:
+        raise ValueError(
+            'Excpected a path to a CSV or an hourly data collection. '
+            'Not {}.'.format(type(value))
         )
     return value
