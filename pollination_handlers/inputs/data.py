@@ -25,7 +25,13 @@ def value_or_data_to_str(value):
     elif isinstance(value, (float, int)):
         value = str(value)
     elif isinstance(value, BaseCollection):
-        value = str(list(value.values))
+        start_values = ['{0:.3f}'.format(v) for v in value.values]
+        final_values = []
+        for v in start_values:
+            new_v = v.rstrip('0') 
+            new_v = '{}0'.format(new_v) if new_v.endswith('.') else new_v
+            final_values.append(new_v)
+        value = str(final_values).replace('\'', '')
     else:
         raise ValueError(
             'Excpected a single number or a data collection. Not {}.'.format(type(value))

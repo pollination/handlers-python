@@ -21,4 +21,4 @@ def test_read_ddy_str():
     dc1 = HourlyDiscontinuousCollection(Header(Temperature(), 'C', a_per),
                                         values, [dt1, dt2])
     res = value_or_data_to_str(dc1)
-    assert res == '[20, 25]'
+    assert res == '[20.0, 25.0]'
