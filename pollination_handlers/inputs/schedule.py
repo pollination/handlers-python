@@ -7,7 +7,7 @@ from honeybee_energy.schedule.ruleset import ScheduleRuleset
 from honeybee_energy.schedule.fixedinterval import ScheduleFixedInterval
 from honeybee_energy.lib.schedules import schedule_by_identifier
 
-from .helper import get_tempfile, write_values_to_csv
+from .helper import get_tempfile, write_sch_values_to_csv
 
 
 def schedule_to_csv(value):
@@ -29,19 +29,19 @@ def schedule_to_csv(value):
             try:  # the only other acceptable string is a schedule identifier
                 sch = schedule_by_identifier(value)
                 sv = sch.values() if isinstance(sch, ScheduleRuleset) else sch.values
-                value = write_values_to_csv(get_tempfile('csv', sch.identifier), sv)
+                value = write_sch_values_to_csv(get_tempfile('csv', sch.identifier), sv)
             except ValueError:  # not found in the schedule library
                 raise ValueError(
                     '"{}" is not a path to a CSV file or a schedule in the honeybee-'
                     'energy schedule library.'.format(value)
                 )
     elif isinstance(value, ScheduleRuleset):
-        value = write_values_to_csv(
+        value = write_sch_values_to_csv(
             get_tempfile('csv', value.identifier), value.values())
     elif isinstance(value, ScheduleFixedInterval):
-        value = write_values_to_csv(get_tempfile('csv', value.identifier), value.values)
+        value = write_sch_values_to_csv(get_tempfile('csv', value.identifier), value.values)
     elif isinstance(value, HourlyContinuousCollection):
-        value = write_values_to_csv(get_tempfile('csv', 'occupancy'), value.values)
+        value = write_sch_values_to_csv(get_tempfile('csv', 'occupancy'), value.values)
     else:
         raise ValueError(
             'Excpected a path to a CSV, an hourly data collection, or a honeybee '
@@ -65,7 +65,7 @@ def data_to_csv(value):
         assert os.path.isfile(value), \
             'Failed to find CSV schedule file at: {}'.format(value)
     elif isinstance(value, (HourlyContinuousCollection, HourlyDiscontinuousCollection)):
-        value = write_values_to_csv(get_tempfile('csv', 'occupancy'), value.values)
+        value = write_sch_values_to_csv(get_tempfile('csv', 'occupancy'), value.values)
     else:
         raise ValueError(
             'Excpected a path to a CSV or an hourly data collection. '
