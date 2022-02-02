@@ -45,6 +45,13 @@ def get_tempfolder(folder_name=None):
 
 
 def write_values_to_csv(file_path, values):
+    """Write a list of values to a CSV."""
+    with open(file_path, 'w') as fp:
+        fp.write('\n'.join(values))
+    return file_path
+
+
+def write_sch_values_to_csv(file_path, values):
     """Write a list of fractional values to a discrete 0/1 CSV."""
     discrete_vals = []
     for v in values:
