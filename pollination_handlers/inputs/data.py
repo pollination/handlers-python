@@ -73,7 +73,8 @@ def value_or_data_to_file(value, file_name=None):
             'Not {}.'.format(type(value))
         )
     if values is not None:
-        return write_values_to_csv(get_tempfile('csv', file_name), value.values)
+        str_values = [str(v) for v in values]
+        return write_values_to_csv(get_tempfile('csv', file_name), str_values)
     return value
 
 
