@@ -124,3 +124,18 @@ def cloudy_bool_to_str(value):
             str -- sky view uniform/cloudy flag text.
     """
     return bool_option_to_str(value, ('cloudy', 'uniform'), 'metric')
+
+
+def visible_vs_solar_to_str(value):
+    """Translate a boolean to the visible vs solar flag.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * visible
+            * solar
+
+        Returns:
+            str -- visible vs solar flag text.
+    """
+    return bool_option_to_str(value, ('visible', 'solar'), 'visible')
