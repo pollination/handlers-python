@@ -39,7 +39,8 @@ def schedule_to_csv(value):
         value = write_sch_values_to_csv(
             get_tempfile('csv', value.identifier), value.values())
     elif isinstance(value, ScheduleFixedInterval):
-        value = write_sch_values_to_csv(get_tempfile('csv', value.identifier), value.values)
+        value = write_sch_values_to_csv(
+            get_tempfile('csv', value.identifier), value.values)
     elif isinstance(value, HourlyContinuousCollection):
         value = write_sch_values_to_csv(get_tempfile('csv', 'occupancy'), value.values)
     else:
