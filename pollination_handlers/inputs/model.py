@@ -26,8 +26,12 @@ def model_to_json(model_obj):
     elif isinstance(model_obj, Model):
         hb_file = get_tempfile('hbjson', model_obj.identifier)
         obj_dict = model_obj.to_dict()
-        with open(hb_file, 'w') as fp:
-            json.dump(obj_dict, fp)
+        try:
+            with open(hb_file, 'w') as fp:
+                json.dump(obj_dict, fp)
+        except UnicodeDecodeError:  # non-unicode character in display_name
+            with open(hb_file, 'w') as fp:
+                json.dump(obj_dict, fp, ensure_ascii=False)
     else:
         raise ValueError(
             'Model input should be a string or a Honeybee Model. '
