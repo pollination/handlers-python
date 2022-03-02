@@ -33,8 +33,12 @@ def energy_sim_par_to_json(sim_par_obj):
         sp_file = get_tempfile('json', 'simulation_parameter')
         obj_dict = sim_par_obj.to_dict()
         # write the dictionary into a file
-        with open(sp_file, 'w') as fp:
-            json.dump(obj_dict, fp)
+        try:
+            with open(sp_file, 'w') as fp:
+                json.dump(obj_dict, fp)
+        except UnicodeDecodeError:  # non-unicode character in the dictionary
+            with open(sp_file, 'w') as fp:
+                json.dump(obj_dict, fp, ensure_ascii=False)
     else:
         raise ValueError(
             'Simulation Parameter input should be a string or an object. '
@@ -102,8 +106,12 @@ def measures_to_folder(measures_obj):
                 nukedir(test_dir, rmdir=True)
         # write the dictionary to a workflow.osw
         osw_json = os.path.join(mea_folder, 'workflow.osw')
-        with open(osw_json, 'w') as fp:
-            json.dump(osw_dict, fp, indent=4)
+        try:
+            with open(osw_json, 'w') as fp:
+                json.dump(osw_dict, fp, indent=4)
+        except UnicodeDecodeError:  # non-unicode character in the dictionary
+            with open(osw_json, 'w') as fp:
+                json.dump(osw_dict, fp, indent=4, ensure_ascii=False)
     else:
         raise ValueError(
             'Measure input should be a list of Measure objects or a path to a folder. '
@@ -133,6 +141,24 @@ def list_to_additional_strings(additional_strings):
             'Additional strings input should be a list or a single string. '
             'Not {}.'.format(type(additional_strings))
         )
+
+
+def list_to_additional_idf(additional_strings):
+    """Translate a list of additional strings into a single IDF file.
+
+        Args:
+            additional_strings: Either a single string or a list of strings to be
+                written into an IDF file.
+
+        Returns:
+            str -- Path to an IDF file.
+    """
+    base_str = list_to_additional_strings(additional_strings)
+    if base_str != '':
+        add_idf = get_tempfile('idf', 'additional')
+        with open(add_idf, 'w') as fp:
+            fp.write(base_str)
+        return add_idf
 
 
 def viz_variables_to_string(viz_variables):
