@@ -12,8 +12,8 @@ def run_period_to_str(value):
     Returns:
         str -- string version of the run period.
     """
-    if value == '':
-        r_per, r_per_str = AnalysisPeriod(), value
+    if value == '' or value is None:
+        r_per, r_per_str = AnalysisPeriod(), ''
     elif isinstance(value, str):  # ensure the string is of an appropriate type
         r_per, r_per_str = AnalysisPeriod.from_string(value), value
     elif isinstance(value, AnalysisPeriod):
@@ -21,4 +21,6 @@ def run_period_to_str(value):
     else:
         raise ValueError('Run period must be a string or an AnalysisPeriod '
                          'object. Got {}.'.format(type(value)))
+    assert r_per.timestep == 1, 'Run period must be for a timestep of 1. '  \
+        'Finer timesteps are not yet supported.'
     return r_per_str
