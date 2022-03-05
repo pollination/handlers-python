@@ -159,6 +159,7 @@ def list_to_additional_idf(additional_strings):
         with open(add_idf, 'w') as fp:
             fp.write(base_str)
         return add_idf
+    return ''
 
 
 def viz_variables_to_string(viz_variables):
