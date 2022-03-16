@@ -1,6 +1,7 @@
 """Handlers for honeybee and dragonfly models."""
 import os
 import json
+import shutil
 
 from honeybee.model import Model
 from dragonfly.model import Model as ModelDF
@@ -65,12 +66,13 @@ def model_to_json_grid_check(model_obj):
     """Translate a Honeybee model to HBJSON and perform a check for SensorGrids.
 
     If no SensorGrids are found in the model, a ValueError will be raised with
-    an explicit error message.
+    an explicit error message. Note that this check will be bypassed if a
+    HBJSON/HBpkl file is connected or if the path to a Radiance Folder.
 
     Args:
-        model_obj: Either a Honeybee model or the path to the HBJSON file.
-            In case the model_obj is a path, it will be returned as is. For a
-            Model object, it will be saved to a HBJSON file in a temp folder.
+        model_obj: Either a Honeybee model or the path to the Honeybee model.
+            Paths can either be to a HBJSON/HBpkl file or to a Honeybee Radiance
+            folder that serves as direct input for a Radiance recipe.
 
     Returns:
         str -- Path to HBJSON file.
@@ -79,6 +81,8 @@ def model_to_json_grid_check(model_obj):
         if len(model_obj.properties.radiance.sensor_grids) == 0:
             raise ValueError(
                 'Model contains no sensor girds. This is required for this recipe.')
+    if isinstance(model_obj, str) and os.path.isdir(model_obj):
+        return _process_model_rad_folder(model_obj)
     return model_to_json(model_obj)
 
 
@@ -107,12 +111,13 @@ def model_to_json_view_check(model_obj):
     """Translate a Honeybee model to HBJSON and perform a check for Views.
 
     If no Views are found in the model, a ValueError will be raised with
-    an explicit error message.
+    an explicit error message. Note that this check will be bypassed if a
+    HBJSON/HBpkl file is connected or if the path to a Radiance Folder.
 
     Args:
         model_obj: Either a Honeybee model or the path to the HBJSON file.
-            In case the model_obj is a path, it will be returned as is. For a
-            Model object, it will be saved to a HBJSON file in a temp folder.
+            Paths can either be to a HBJSON/HBpkl file or to a Honeybee Radiance
+            folder that serves as direct input for a Radiance recipe.
 
     Returns:
         str -- Path to HBJSON file.
@@ -121,6 +126,8 @@ def model_to_json_view_check(model_obj):
         if len(model_obj.properties.radiance.views) == 0:
             raise ValueError(
                 'Model contains no views. This is required for this recipe.')
+    if isinstance(model_obj, str) and os.path.isdir(model_obj):
+        return _process_model_rad_folder(model_obj)
     return model_to_json(model_obj)
 
 
@@ -151,3 +158,19 @@ def model_dragonfly_to_json(model_obj):
             'Not {}.'.format(type(model_obj))
         )
     return df_file
+
+
+def _process_model_rad_folder(model_obj):
+    """Zip a Radiance folder for input to a Radiance recipe."""
+    assert os.path.isdir(os.path.join(model_obj, 'model')), \
+        'File path "{}" does not contain a model subfolder for the Radiance folder.'
+    try:
+        model_path, model_id = os.path.split(model_obj)
+        if model_id == 'radiance':  # the model ID is probably in the folder above
+            model_path, model_id = os.path.split(model_path)
+        else:
+            model_id = None
+    except Exception:  # shallow model folder
+        model_id = None
+    hb_file = get_tempfile('', model_id)
+    return shutil.make_archive(hb_file, 'zip', model_obj)
