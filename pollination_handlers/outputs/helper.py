@@ -2,7 +2,8 @@ import os
 import json
 
 
-def read_sensor_grid_result(result_folder, extension, grid_key, is_percent=True):
+def read_sensor_grid_result(
+        result_folder, extension, grid_key, is_percent=True, factor=1):
     """Read results from files that align with sensor grids.
 
     Args:
@@ -13,6 +14,9 @@ def read_sensor_grid_result(result_folder, extension, grid_key, is_percent=True)
         is_percent: Boolean to note if the values are intended to be percent, in
             which case a check will be done to ensure no value is greater than
             one hundred.
+        factor: An optional number to be multiplied by all of the results.
+            This can be used to perform unit conversions or change fractional values
+            to percentages. (Default: 1)
 
     Returns:
         A matrix with each sub-list containing the values for each of the sensor grids.
@@ -42,8 +46,10 @@ def read_sensor_grid_result(result_folder, extension, grid_key, is_percent=True)
             for _ in range(st_ln):
                 next(inf)
             if is_percent:
-                results.append([min(float(next(inf)), 100) for _ in range(sensor_count)])
+                results.append(
+                    [min(float(next(inf)) * factor, 100) for _ in range(sensor_count)]
+                )
             else:
-                results.append([float(next(inf)) for _ in range(sensor_count)])
+                results.append([float(next(inf)) * factor for _ in range(sensor_count)])
 
     return results

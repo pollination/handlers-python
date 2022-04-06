@@ -30,6 +30,11 @@ def read_udi_from_folder(result_folder):
     return read_sensor_grid_result(result_folder, 'udi', 'full_id')
 
 
+def read_ga_from_folder(result_folder):
+    """Read glare autonomy values from a folder with radiance .da result files."""
+    return read_sensor_grid_result(result_folder, 'ga', 'full_id', factor=100)
+
+
 def read_hours_from_folder(result_folder):
     """Read hours from a folder with radiance .res result files."""
     return read_sensor_grid_result(result_folder, 'res', 'full_id', False)
