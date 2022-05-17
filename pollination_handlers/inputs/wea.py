@@ -3,6 +3,7 @@ import os
 
 from ladybug.epw import EPW
 from ladybug.wea import Wea
+from ladybug.dt import DateTime
 
 from .helper import get_tempfile
 
@@ -27,17 +28,17 @@ def wea_handler(wea_obj):
         elif wea_obj.lower().endswith('.epw'):
             # translate epw to wea
             wea = Wea.from_epw_file(wea_obj)
-            file_path = get_tempfile('wea', wea.location.city)
+            file_path = get_tempfile('wea', _wea_file_name(wea))
             wea_file = wea.write(file_path)
         else:
             raise ValueError(
                 'File path should end with wea or epw not %s' % wea_obj.split('.')[-1]
             )
     elif isinstance(wea_obj, Wea):
-        file_path = get_tempfile('wea', wea_obj.location.city)
+        file_path = get_tempfile('wea', _wea_file_name(wea_obj))
         wea_file = wea_obj.write(file_path)
     elif isinstance(wea_obj, EPW):
-        file_path = get_tempfile('wea', wea_obj.location.city)
+        file_path = get_tempfile('wea', _wea_file_name(wea_obj))
         wea_file = wea_obj.to_wea(file_path)
     else:
         raise ValueError(
@@ -61,3 +62,12 @@ def wea_handler_timestep_check(wea_obj):
     if isinstance(wea_obj, Wea):
         assert wea_obj.timestep == 1, 'Wea timestep must be 1 for this recipe.'
     return wea_handler(wea_obj)
+
+
+def _wea_file_name(wea_obj):
+    """Generate a file name from a Wea object."""
+    try:
+        dts = wea_obj.datetimes
+    except AttributeError:  # it's an EPW object
+        dts = (DateTime(1, 1, 0), DateTime(12, 11, 23))
+    return '{}_{}_{}'.format(wea_obj.location.city, dts[0].int_hoy, dts[-1].int_hoy)
