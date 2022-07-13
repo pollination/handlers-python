@@ -49,7 +49,7 @@ def wea_handler(wea_obj):
 
 
 def wea_handler_timestep_check(wea_obj):
-    """Translate a Wea object to a wea file while checking to be sure the timesep is 1.
+    """Translate a Wea object to a wea file while checking to be sure the timestep is 1.
 
         Args:
             wea_obj: Either a Wea python object or the path to a wea or an epw file.
@@ -70,4 +70,5 @@ def _wea_file_name(wea_obj):
         dts = wea_obj.datetimes
     except AttributeError:  # it's an EPW object
         dts = (DateTime(1, 1, 0), DateTime(12, 11, 23))
+    wea_obj.location.city = ''.join(i for i in wea_obj.location.city if ord(i) < 128)
     return '{}_{}_{}'.format(wea_obj.location.city, dts[0].int_hoy, dts[-1].int_hoy)
