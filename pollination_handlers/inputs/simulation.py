@@ -30,7 +30,7 @@ def energy_sim_par_to_json(sim_par_obj):
             raise ValueError('Invalid file path: %s' % sim_par_obj)
         sp_file = sim_par_obj
     elif isinstance(sim_par_obj, SimulationParameter):
-        sp_file = get_tempfile('json', 'simulation_parameter')
+        sp_file = get_tempfile('json')
         obj_dict = sim_par_obj.to_dict()
         # write the dictionary into a file
         try:
@@ -155,7 +155,7 @@ def list_to_additional_idf(additional_strings):
     """
     base_str = list_to_additional_strings(additional_strings)
     if base_str != '':
-        add_idf = get_tempfile('idf', 'additional')
+        add_idf = get_tempfile('idf')
         with open(add_idf, 'w') as fp:
             fp.write(base_str)
         return add_idf

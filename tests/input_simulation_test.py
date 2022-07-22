@@ -26,5 +26,5 @@ def test_list_to_additional_idf():
         'Output:Variable, Window_0, Surface Window System Solar Transmittance, Timestep;'
     ]
     res = list_to_additional_idf(add_text)
-    assert res.replace('\\', '/').endswith('additional.idf')
+    assert res.endswith('.idf')
     assert os.path.isfile(res)
