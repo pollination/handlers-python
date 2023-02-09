@@ -139,3 +139,18 @@ def visible_vs_solar_to_str(value):
             str -- visible vs solar flag text.
     """
     return bool_option_to_str(value, ('visible', 'solar'), 'visible')
+
+
+def bldg_lighting_to_str(value):
+    """Translate a boolean to the lighting-method flag of Appendix G simulations.
+
+        Args:
+            value: Either a boolean or one of two text strings.
+
+            * building
+            * space
+
+        Returns:
+            str -- building vs space flag text.
+    """
+    return bool_option_to_str(value, ('building', 'space'), 'bldg_lighting')
