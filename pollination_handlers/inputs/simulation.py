@@ -187,3 +187,35 @@ def viz_variables_to_string(viz_variables):
             'Visualization variables input should be a list or a single string. '
             'Not {}.'.format(type(viz_variables))
         )
+
+
+def standard_to_str(standard_str):
+    """Translate a different text inputs into an acceptable standard/vintage.
+
+        Args:
+            standard_str: A string referencing a standard or building vintage
+                to be used.
+
+        Returns:
+            str -- A string that correctly references the standard in honeybee-schema.
+    """
+    EFF_STANDARDS = {
+        'DOE_Ref_Pre_1980': 'DOE_Ref_Pre_1980',
+        'DOE_Ref_1980_2004': 'DOE_Ref_1980_2004',
+        'ASHRAE_2004': 'ASHRAE_2004',
+        'ASHRAE_2007': 'ASHRAE_2007',
+        'ASHRAE_2010': 'ASHRAE_2010',
+        'ASHRAE_2013': 'ASHRAE_2013',
+        'ASHRAE_2016': 'ASHRAE_2016',
+        'ASHRAE_2019': 'ASHRAE_2019',
+        'pre_1980': 'DOE_Ref_Pre_1980',
+        '1980_2004': 'DOE_Ref_1980_2004',
+        '2004': 'ASHRAE_2004',
+        '2007': 'ASHRAE_2007',
+        '2010': 'ASHRAE_2010',
+        '2013': 'ASHRAE_2013',
+        '2016': 'ASHRAE_2016',
+        '2019': 'ASHRAE_2019'
+    }
+    if standard_str is not None:
+        return EFF_STANDARDS[standard_str]
