@@ -217,5 +217,5 @@ def standard_to_str(standard_str):
         '2016': 'ASHRAE_2016',
         '2019': 'ASHRAE_2019'
     }
-    if standard_str is not None:
+    if standard_str is not None and standard_str != '':
         return EFF_STANDARDS[standard_str]
