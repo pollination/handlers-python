@@ -42,9 +42,30 @@ def model_to_json(model_obj):
 
 
 def model_to_json_room_check(model_obj):
-    """Translate a Honeybee model to HBJSON with checks for Rooms and SensorGrids.
+    """Translate a Honeybee model to HBJSON with checks for Rooms.
 
-    If no Rooms or SensorGrids are found in the model, a ValueError will be
+    If no Rooms are found in the model, a ValueError will be raised with an
+    explicit error message.
+
+    Args:
+        model_obj: Either a Honeybee model or the path to the HBJSON file.
+            In case the model_obj is a path, it will be returned as is. For a
+            Model object, it will be saved to a HBJSON file in a temp folder.
+
+    Returns:
+        str -- Path to HBJSON file.
+    """
+    if isinstance(model_obj, Model):
+        if len(model_obj.rooms) == 0:
+            raise ValueError(
+                'Model contains no Rooms. This is required for this recipe.')
+    return model_to_json(model_obj)
+
+
+def model_to_json_hvac_check(model_obj):
+    """Translate a Honeybee model to HBJSON with checks for Rooms with HVAC.
+
+    If no Rooms with HVAC are found in the model, a ValueError will be
     raised with an explicit error message.
 
     Args:
@@ -59,6 +80,9 @@ def model_to_json_room_check(model_obj):
         if len(model_obj.rooms) == 0:
             raise ValueError(
                 'Model contains no Rooms. This is required for this recipe.')
+        if len(model_obj.properties.energy.hvacs) == 0:
+            raise ValueError(
+                'Model contains no HVAC Systems. This is required for this recipe.')
     return model_to_json(model_obj)
 
 
