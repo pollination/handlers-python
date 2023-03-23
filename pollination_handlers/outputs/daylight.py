@@ -2,7 +2,7 @@
 import os
 import json
 
-from .helper import read_sensor_grid_result
+from .helper import read_sensor_grid_result, read_grid_results
 
 
 def read_df_from_folder(result_folder):
@@ -38,6 +38,11 @@ def read_ga_from_folder(result_folder):
 def read_hours_from_folder(result_folder):
     """Read hours from a folder with radiance .res result files."""
     return read_sensor_grid_result(result_folder, 'res', 'full_id', False)
+
+
+def read_ase_from_folder(result_folder):
+    """Read annual sunlight exposure values from a folder with radiance .ase result files."""
+    return read_grid_results(result_folder, 'ase', 'full_id')
 
 
 def sort_ill_from_folder(result_folder):
