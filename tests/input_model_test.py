@@ -32,8 +32,8 @@ def test_read_model_object():
     res4 = model_to_json_room_check(model)
     assert os.path.isfile(res4)
 
-    res5 = model_to_json_hvac_check(model)
-    assert os.path.isfile(res5)
+    with pytest.raises(ValueError):
+        model_to_json_hvac_check(model)
 
     with pytest.raises(ValueError):
         model_to_json_view_check(model)

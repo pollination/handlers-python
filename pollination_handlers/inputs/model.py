@@ -6,6 +6,8 @@ import shutil
 from honeybee.model import Model
 from dragonfly.model import Model as ModelDF
 
+from honeybee_energy.hvac.idealair import IdealAirSystem
+
 from .helper import get_tempfile
 
 
@@ -80,9 +82,19 @@ def model_to_json_hvac_check(model_obj):
         if len(model_obj.rooms) == 0:
             raise ValueError(
                 'Model contains no Rooms. This is required for this recipe.')
-        if len(model_obj.properties.energy.hvacs) == 0:
+        model_hvacs = model_obj.properties.energy.hvacs
+        if len(model_hvacs) == 0:
             raise ValueError(
                 'Model contains no HVAC Systems. This is required for this recipe.')
+        ideal_air_count = 0
+        for hvac in model_hvacs:
+            if isinstance(hvac, IdealAirSystem):
+                ideal_air_count += 1
+        if ideal_air_count != 0:
+            raise ValueError(
+                'Model contains {} Ideal Air Systems.\nThis recipe requires all '
+                'conditioned rooms\nto use detailed or template '
+                'systems.'.format(ideal_air_count))
     return model_to_json(model_obj)
 
 
