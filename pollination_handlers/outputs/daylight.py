@@ -2,6 +2,7 @@
 import os
 import json
 
+from ladybug.datacollection import HourlyContinuousCollection
 from .helper import read_sensor_grid_result, read_grid_results
 
 
@@ -104,4 +105,42 @@ def ill_credit_json_from_path(eui_json):
     results = []
     for key in sorted(data.keys()):
         results.append('{}: {}'.format(key, data[key]))
+    return results
+
+
+def read_leed_datacollection_from_folder(result_folder):
+    """Read LEED Daylight Option I datacollections """
+    # check that the required files are present
+    if not os.path.isdir(result_folder):
+        raise ValueError('Invalid result folder: %s' % result_folder)
+    grid_json = os.path.join(result_folder, 'grids_info.json')
+    if not os.path.isfile(grid_json):
+        raise ValueError('Result folder contains no grids_info.json.')
+
+    # load the list of grids and gather all of the results
+    with open(grid_json) as json_file:
+        grid_list = json.load(json_file)
+    results = []
+    for grid in grid_list:
+        grid_id = grid['full_id']
+        result_file = os.path.join(result_folder, '{}.{}'.format(grid_id, 'json'))
+        with open(result_file) as json_file:
+            data = json.load(json_file)
+            datacollection = HourlyContinuousCollection.from_dict(data)
+            results.append(datacollection)
+
+    return results
+
+
+def read_leed_shade_transmittance_schedule(shd_json):
+    """Read LEED Daylight Option I shade transmittance schedule."""
+    if not os.path.isfile(shd_json):
+        raise ValueError('Invalid file path: %s' % shd_json)
+    results = []
+    with open(shd_json) as json_file:
+        data = json.load(json_file)
+        for data_dict in data.values():
+            datacollection = HourlyContinuousCollection.from_dict(data_dict)
+            results.append(datacollection)
+
     return results
