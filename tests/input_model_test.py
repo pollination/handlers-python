@@ -26,17 +26,26 @@ def test_read_model_object():
     res2 = model_to_json_grid_check(model)
     assert os.path.isfile(res2)
 
-    res3 = model_to_json_grid_room_check(model)
+    res3 = model_to_json_grid_check('./tests/assets/two_rooms.hbjson')
     assert os.path.isfile(res3)
 
-    res4 = model_to_json_room_check(model)
+    res4 = model_to_json_grid_room_check(model)
     assert os.path.isfile(res4)
+
+    res5 = model_to_json_room_check(model)
+    assert os.path.isfile(res5)
 
     with pytest.raises(ValueError):
         model_to_json_hvac_check(model)
 
     with pytest.raises(ValueError):
         model_to_json_view_check(model)
+
+    with pytest.raises(ValueError):
+        model_to_json_grid_check('./tests/assets/no_grid.hbjson')
+
+    with pytest.raises(ValueError):
+        model_to_json_grid_room_check('./tests/assets/no_grid.hbjson')
 
 
 def test_read_model_dragonfly_str():
