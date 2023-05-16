@@ -117,6 +117,11 @@ def model_to_json_grid_check(model_obj):
         if len(model_obj.properties.radiance.sensor_grids) == 0:
             raise ValueError(
                 'Model contains no sensor girds. This is required for this recipe.')
+    if isinstance(model_obj, str) and os.path.isfile(model_obj):
+            model_obj = Model.from_file(model_obj)
+            if len(model_obj.properties.radiance.sensor_grids) == 0:
+                raise ValueError(
+                    'Model contains no sensor girds. This is required for this recipe.')
     if isinstance(model_obj, str) and os.path.isdir(model_obj):
         return _process_model_rad_folder(model_obj)
     return model_to_json(model_obj)
