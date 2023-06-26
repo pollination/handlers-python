@@ -1,7 +1,15 @@
 """Handlers for honeybee and dragonfly models."""
 import os
+import sys
 import json
 import shutil
+
+if (sys.version_info < (3, 0)):
+    readmode = 'rb'
+    writemode = 'wb'
+else:
+    readmode = 'r'
+    writemode = 'w'
 
 from honeybee.model import Model
 from dragonfly.model import Model as ModelDF
@@ -29,11 +37,12 @@ def model_to_json(model_obj):
     elif isinstance(model_obj, Model):
         hb_file = get_tempfile('hbjson', model_obj.identifier)
         obj_dict = model_obj.to_dict()
-        try:
-            with open(hb_file, 'w') as fp:
-                json.dump(obj_dict, fp)
-        except UnicodeDecodeError:  # non-unicode character in display_name
-            with open(hb_file, 'w') as fp:
+        if (sys.version_info < (3, 0)):  # we need to manually encode it as UTF-8
+            with open(hb_file, writemode) as fp:
+                workflow_str = json.dumps(obj_dict, ensure_ascii=False)
+                fp.write(workflow_str.encode('utf-8'))
+        else:
+            with open(hb_file, writemode, encoding='utf-8') as fp:
                 json.dump(obj_dict, fp, ensure_ascii=False)
     else:
         raise ValueError(
@@ -118,10 +127,10 @@ def model_to_json_grid_check(model_obj):
             raise ValueError(
                 'Model contains no sensor girds. This is required for this recipe.')
     if isinstance(model_obj, str) and os.path.isfile(model_obj):
-            model_obj = Model.from_file(model_obj)
-            if len(model_obj.properties.radiance.sensor_grids) == 0:
-                raise ValueError(
-                    'Model contains no sensor girds. This is required for this recipe.')
+        model_obj = Model.from_file(model_obj)
+        if len(model_obj.properties.radiance.sensor_grids) == 0:
+            raise ValueError(
+                'Model contains no sensor girds. This is required for this recipe.')
     if isinstance(model_obj, str) and os.path.isdir(model_obj):
         return _process_model_rad_folder(model_obj)
     return model_to_json(model_obj)
