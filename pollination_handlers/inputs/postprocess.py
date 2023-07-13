@@ -1,25 +1,50 @@
 """Handlers for post-processing options."""
 import json
+from jsonschema import validate
 
 from .helper import get_tempfile
 
 
 def grid_metrics(json_file):
+    """Validate the file for custom grid metrics.
+
+        Args:
+            json_file: A JSON file with custom grid metrics.
+
+        Returns:
+            str -- Path to a the custom grid metrics file.
+    """
+    _of_schema = {
+        'type': 'array',
+        'items': {
+            'properties': {
+                'minimum': {'type': 'number'},
+                'maximum': {'type': 'number'},
+                'exclusiveMinimum': {'type': 'number'},
+                'exclusiveMaximum': {'type': 'number'}
+            },
+            'additionalProperties': False
+        }
+    }
+    schema = {
+        'type': 'array',
+        'items': {
+            'type': 'object',
+            'properties': {
+                'minimum': {'type': 'number'},
+                'maximum': {'type': 'number'},
+                'exclusiveMinimum': {'type': 'number'},
+                'exclusiveMaximum': {'type': 'number'},
+                'allOf': _of_schema,
+                'anyOf': _of_schema
+            },
+            'additionalProperties': False
+        }
+    }
+
     with open(json_file) as file:
         grid_metrics = json.load(file)
-    assert isinstance(grid_metrics, list), \
-        'Information in the grid metrics file must be a list.'
-    for grid_metric in grid_metrics:
-        assert isinstance(grid_metric, dict), \
-        'Each item in grid metrics must be a dictionary.'
-        if 'allOf' in grid_metric:
-            assert isinstance(grid_metric['allOf'], list)
-            for gr_m in grid_metric['allOf']:
-                assert isinstance(gr_m, dict)
-        elif 'anyOf' in grid_metric:
-            assert isinstance(grid_metric['anyOf'], list)
-            for gr_m in grid_metric['anyOf']:
-                assert isinstance(gr_m, dict)
+    validate(grid_metrics, schema)
 
     file_path = get_tempfile('json', 'grid_metrics')
     with open(file_path, 'w') as f:
