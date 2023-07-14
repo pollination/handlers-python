@@ -51,7 +51,7 @@ def grid_metrics(gm_obj):
         else:
             grid_metrics = json.loads(gm_obj)
     elif isinstance(gm_obj, list):
-        grid_metrics = [_gm for _gm in gm_obj]
+        grid_metrics = gm_obj
     else:
         raise TypeError(
             'Unexpected type of input gm_obj. Valid types are str and list. '
