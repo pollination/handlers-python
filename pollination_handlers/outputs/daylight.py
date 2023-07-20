@@ -1,6 +1,7 @@
 """Handlers for daylight simulation."""
 import os
 import json
+import csv
 
 from ladybug.datacollection import HourlyContinuousCollection
 from .helper import read_sensor_grid_result, read_grid_results
@@ -144,3 +145,17 @@ def read_leed_shade_transmittance_schedule(shd_json):
             results.append(datacollection)
 
     return results
+
+
+def read_grid_metrics(gr_metrics):
+    """Read the grid metrics summary file."""
+    grid_metrics = []
+    with open(gr_metrics, 'r') as file:
+        gr_m = list(csv.DictReader(file))
+    for row in gr_m:
+        _gr_m = []
+        for key, value in row.items():
+            _gr_m.append('{}: {}'.format(key, value))
+        grid_metrics.append(_gr_m)
+
+    return grid_metrics
