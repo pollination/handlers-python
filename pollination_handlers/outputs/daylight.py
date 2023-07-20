@@ -151,11 +151,13 @@ def read_grid_metrics(gr_metrics):
     """Read the grid metrics summary file."""
     grid_metrics = []
     with open(gr_metrics, 'r') as file:
-        gr_m = list(csv.DictReader(file))
-    for row in gr_m:
-        _gr_m = []
-        for key, value in row.items():
-            _gr_m.append('{}: {}'.format(key, value))
-        grid_metrics.append(_gr_m)
+        reader = csv.DictReader(file)
+        fieldnames = reader.fieldnames
+
+        for row in reader:
+            _gr_m = []
+            for field in fieldnames:
+                _gr_m.append('{}: {}'.format(field, row[field]))
+            grid_metrics.append(_gr_m)
 
     return grid_metrics
