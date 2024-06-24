@@ -109,6 +109,21 @@ def ill_credit_json_from_path(eui_json):
     return results
 
 
+def read_leed_summary_grid(summary_json):
+    """Read the grid summary values from the summary_grid.json file."""
+    if not os.path.isfile(summary_json):
+        raise ValueError('Invalid file path: %s' % summary_json)
+    with open(summary_json) as json_file:
+        data = json.load(json_file)
+    results = []
+    for summary_grid in data.values():
+        summary_results = []
+        for key, value in summary_grid.items():
+            summary_results.append('{}: {}'.format(key, value))
+        results.append(summary_results)
+    return results
+
+
 def read_leed_datacollection_from_folder(result_folder):
     """Read LEED Daylight Option I datacollections """
     # check that the required files are present
