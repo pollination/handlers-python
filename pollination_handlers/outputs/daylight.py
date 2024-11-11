@@ -176,3 +176,30 @@ def read_grid_metrics(gr_metrics):
             grid_metrics.append(_gr_m)
 
     return grid_metrics
+
+
+def read_json_dict(dict_json):
+    """Read a JSON dict."""
+    if not os.path.isfile(dict_json):
+        raise ValueError('Invalid file path: %s' % dict_json)
+    with open(dict_json) as json_file:
+        data = json.load(json_file)
+    results = []
+    for key in sorted(data.keys()):
+        results.append('{}: {}'.format(key, data[key]))
+    return results
+
+
+def read_json_summary_list(summary_json):
+    """Read a JSON list of summaries (dicts)."""
+    if not os.path.isfile(summary_json):
+        raise ValueError('Invalid file path: %s' % summary_json)
+    with open(summary_json) as json_file:
+        data = json.load(json_file)
+    results = []
+    for summary_grid in data.values():
+        summary_results = []
+        for key, value in summary_grid.items():
+            summary_results.append('{}: {}'.format(key, value))
+        results.append(summary_results)
+    return results
