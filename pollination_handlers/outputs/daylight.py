@@ -197,9 +197,9 @@ def read_json_summary_list(summary_json):
     with open(summary_json) as json_file:
         data = json.load(json_file)
     results = []
-    for summary_grid in data.values():
+    for summary in data:
         summary_results = []
-        for key, value in summary_grid.items():
+        for key, value in summary.items():
             summary_results.append('{}: {}'.format(key, value))
         results.append(summary_results)
     return results
