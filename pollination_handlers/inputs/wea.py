@@ -76,10 +76,11 @@ def wea_handler_timestep_annual_check(wea_obj):
         Returns:
             str -- Path to a wea file.
     """
-    if isinstance(wea_obj, Wea):
-        assert wea_obj.timestep == 1, 'Wea timestep must be 1 for this recipe.'
-        assert wea_obj.is_annual, 'Wea must be annual for this recipe.'
-    return wea_handler(wea_obj)
+    wea_file = wea_handler(wea_obj)
+    wea_obj = Wea.from_file(wea_file)
+    assert wea_obj.timestep == 1, 'Wea timestep must be 1 for this recipe.'
+    assert wea_obj.is_annual, 'Wea must be annual for this recipe.'
+    return wea_file
 
 
 def _wea_file_name(wea_obj):
