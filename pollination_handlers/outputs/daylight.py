@@ -2,6 +2,7 @@
 import os
 import json
 import csv
+from collections import OrderedDict
 
 from ladybug.datacollection import HourlyContinuousCollection
 from .helper import read_sensor_grid_result, read_grid_results
@@ -195,11 +196,13 @@ def read_json_summary_list(summary_json):
     if not os.path.isfile(summary_json):
         raise ValueError('Invalid file path: %s' % summary_json)
     with open(summary_json) as json_file:
-        data = json.load(json_file)
+        data = json.load(json_file, object_pairs_hook=OrderedDict)
     results = []
     for summary in data:
         summary_results = []
         for key, value in summary.items():
+            if isinstance(value, dict):
+                value = json.dumps(value)
             summary_results.append('{}: {}'.format(key, value))
         results.append(summary_results)
     return results
