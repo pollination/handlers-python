@@ -206,3 +206,13 @@ def read_json_summary_list(summary_json):
             summary_results.append('{}: {}'.format(key, value))
         results.append(summary_results)
     return results
+
+
+def read_hourly_continuous_collection_from_json(json_path):
+    """Read a single hourly continuous collection from a JSON file."""
+    if not os.path.isfile(json_path):
+        raise ValueError('Invalid file path: %s' % json_path)
+    with open(json_path) as json_file:
+        data = json.load(json_file)
+    datacollection = HourlyContinuousCollection.from_dict(data)
+    return datacollection
