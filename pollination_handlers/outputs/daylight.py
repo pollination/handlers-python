@@ -216,3 +216,19 @@ def read_hourly_continuous_collection_from_json(json_path):
         data = json.load(json_file)
     datacollection = HourlyContinuousCollection.from_dict(data)
     return datacollection
+
+
+def read_csv_summary_formatted(summary_csv):
+    """Read a CSV file and return a list of formatted summary lists."""
+    if not os.path.isfile(summary_csv):
+        raise ValueError('Invalid file path: %s' % summary_csv)
+
+    results = []
+    with open(summary_csv) as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            row_results = []
+            for key, value in row.items():
+                row_results.append('{}: {}'.format(key, value))
+            results.append(row_results)
+    return results
