@@ -91,3 +91,47 @@ def _wea_file_name(wea_obj):
         dts = (DateTime(1, 1, 0), DateTime(12, 11, 23))
     wea_obj.location.city = ''.join(i for i in wea_obj.location.city if ord(i) < 128)
     return '{}_{}_{}'.format(wea_obj.location.city, dts[0].int_hoy, dts[-1].int_hoy)
+
+
+def epw_or_wea_handler_timestep_annual_check(wea_obj):
+    """Translate an EPW or Wea object to check annual/timestep criteria, 
+    but return the original input object/path, e.g., if the input is a path to
+    an epw file, return that path after checking the criteria.
+
+        Args:
+            wea_obj: Either a Wea python object, an EPW object, or the path to a
+            wea or an epw file.
+
+        Returns:
+            Either a EPW or Wea file.
+    """
+    if isinstance(wea_obj, str):
+        if not os.path.isfile(wea_obj):
+            raise ValueError('Invalid file path: %s' % wea_obj)
+        if wea_obj.lower().endswith('.wea'):
+            check_wea = Wea.from_file(wea_obj)
+            result = wea_obj
+        elif wea_obj.lower().endswith('.epw'):
+            check_wea = Wea.from_epw_file(wea_obj)
+            result = wea_obj
+        else:
+            raise ValueError(
+                'File path should end with wea or epw not %s' % wea_obj.split('.')[-1]
+            )
+    elif isinstance(wea_obj, EPW):
+        check_wea = wea_obj.to_wea()
+        result = wea_obj
+    elif isinstance(wea_obj, Wea):
+        check_wea = wea_obj
+        file_path = get_tempfile('wea', _wea_file_name(wea_obj))
+        result = wea_obj.write(file_path)
+    else:
+        raise ValueError(
+            'Wea input should be a string, a Wea object, or an EPW object. '
+            'Not {}.'.format(type(wea_obj))
+        )
+
+    assert check_wea.timestep == 1, 'Wea timestep must be 1 for this recipe.'
+    assert check_wea.is_annual, 'Wea must be annual for this recipe.'
+
+    return result
