@@ -115,7 +115,7 @@ def read_leed_summary_grid(summary_json):
     if not os.path.isfile(summary_json):
         raise ValueError('Invalid file path: %s' % summary_json)
     with open(summary_json) as json_file:
-        data = json.load(json_file)
+        data = json.load(json_file, object_pairs_hook=OrderedDict)
     results = []
     for summary_grid in data.values():
         summary_results = []
@@ -136,7 +136,7 @@ def read_leed_datacollection_from_folder(result_folder):
 
     # load the list of grids and gather all of the results
     with open(grid_json) as json_file:
-        grid_list = json.load(json_file)
+        grid_list = json.load(json_file, object_pairs_hook=OrderedDict)
     results = []
     for grid in grid_list:
         grid_id = grid['full_id']
@@ -155,7 +155,7 @@ def read_leed_shade_transmittance_schedule(shd_json):
         raise ValueError('Invalid file path: %s' % shd_json)
     results = []
     with open(shd_json) as json_file:
-        data = json.load(json_file)
+        data = json.load(json_file, object_pairs_hook=OrderedDict)
         for data_dict in data.values():
             datacollection = HourlyContinuousCollection.from_dict(data_dict)
             results.append(datacollection)
@@ -184,7 +184,7 @@ def read_json_dict(dict_json):
     if not os.path.isfile(dict_json):
         raise ValueError('Invalid file path: %s' % dict_json)
     with open(dict_json) as json_file:
-        data = json.load(json_file)
+        data = json.load(json_file, object_pairs_hook=OrderedDict)
     results = []
     for key in sorted(data.keys()):
         results.append('{}: {}'.format(key, data[key]))
@@ -213,7 +213,7 @@ def read_hourly_continuous_collection_from_json(json_path):
     if not os.path.isfile(json_path):
         raise ValueError('Invalid file path: %s' % json_path)
     with open(json_path) as json_file:
-        data = json.load(json_file)
+        data = json.load(json_file, object_pairs_hook=OrderedDict)
     datacollection = HourlyContinuousCollection.from_dict(data)
     return datacollection
 
