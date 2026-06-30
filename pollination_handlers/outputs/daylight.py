@@ -186,8 +186,10 @@ def read_json_dict(dict_json):
     with open(dict_json) as json_file:
         data = json.load(json_file, object_pairs_hook=OrderedDict)
     results = []
-    for key in sorted(data.keys()):
-        results.append('{}: {}'.format(key, data[key]))
+    for key, value in data.items():
+        if isinstance(value, dict):
+            value = json.dumps(value)
+        results.append('{}: {}'.format(key, value))
     return results
 
 
